@@ -241,6 +241,9 @@
  * this.isCounter() ? 500:100
  * 
  * ■更新履歴
+ * var 1.1.1(2020/04/02)
+ * 混乱時に反撃が発生した場合に、強制的に通常攻撃で反撃が発動してしまう現象を変更して、指定したスキルでの反撃としました。
+ *
  * ver 1.1.0
  * 条件を複数指定した際に、一部が無効だったバグを修正。
  * 
@@ -781,6 +784,15 @@ Game_Action.prototype.counterSpeed=function(){
         result +=10000;
     }
     return result;
+};
+
+const Game_Action_setConfusion=Game_Action.prototype.setConfusion;
+Game_Action.prototype.setConfusion = function() {
+    if (this.isCounter()) {
+        return;
+    } else {
+        Game_Action_setConfusion.apply(this, arguments);
+    }
 };
 
 class IntersectionVisitor{
